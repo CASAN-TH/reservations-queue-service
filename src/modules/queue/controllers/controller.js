@@ -1,12 +1,12 @@
 'use strict';
 var mongoose = require('mongoose'),
-    model = require('../models/model'), 
+    model = require('../models/model'),
     Queue = mongoose.model('Queue'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
     _ = require('lodash');
-    
+
 exports.getList = function (req, res) {
-        Queue.find(function (err, datas) {
+    Queue.find(function (err, datas) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -22,9 +22,9 @@ exports.getList = function (req, res) {
 };
 
 exports.create = function (req, res) {
-        var newQueue = new Queue(req.body);
-        newQueue.createby = req.user;
-        newQueue.save(function (err, data) {
+    var newQueue = new Queue(req.body);
+    newQueue.createby = req.user;
+    newQueue.save(function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -102,3 +102,49 @@ exports.delete = function (req, res) {
         };
     });
 };
+exports.getQueue = (req, res, next) => {
+    var id = req.body._id
+    // console.log(req.body._id);
+    Queue.find({ shop_id: id, status: true }, (err, data) => {
+        if (err) {
+            return res.status(400).send({
+                status: 400,
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            // console.log(data);
+            req.find = data
+            next();
+
+        }
+
+    })
+}
+exports.sortQueue = (req, res, next) => {
+    // var dataSort = req.find
+    var dataSort = req.find.sort((a, b) => {
+        return new Date(b.created) - new Date(a.created);
+    })
+    req.sortDataQueue = dataSort
+    // console.log(req.sortDataQueue);
+    next();
+}
+exports.cookigQueue = (req, res, next) => {
+    var userId = req.body.user_id
+    const index = _.findIndex(req.sortDataQueue, function (o) {
+        return o.createby._id.toString() == userId.toString();
+    });
+    // console.log(index);
+    req.dataQueue = {
+        queue: index + 1
+    }
+
+
+    next();
+}
+exports.returnData = (req, res) => {
+    res.jsonp({
+        status: 200,
+        data: req.dataQueue
+    })
+}
