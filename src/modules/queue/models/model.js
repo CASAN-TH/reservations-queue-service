@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 
 
 var QueueSchema = new Schema({
-    queue: {
+    peoples: {
         type: String
     },
     shop_id: {
