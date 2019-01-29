@@ -136,7 +136,7 @@ exports.cookigQueue = (req, res, next) => {
     });
     // console.log(index);
     req.dataQueue = {
-        queue: index + 1
+        queue: req.sortDataQueue.length === 0 ? 0 : index + 1
     }
 
 
