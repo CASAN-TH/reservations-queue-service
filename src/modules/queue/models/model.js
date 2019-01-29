@@ -5,9 +5,14 @@ var Schema = mongoose.Schema;
 
 
 var QueueSchema = new Schema({
-    name: {
-        type: String,
-        required: 'Please fill a Queue name',
+    queue: {
+        type: String
+    },
+    shop_id: {
+        type: String
+    },
+    status: {
+        type: Boolean
     },
     created: {
         type: Date,

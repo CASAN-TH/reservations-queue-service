@@ -16,7 +16,7 @@ describe('Queue CRUD routes tests', function () {
 
     before(function (done) {
         mockup = {
-            name: 'name'
+            queue: 'name'
         };
         credentials = {
             username: 'username',
@@ -32,18 +32,18 @@ describe('Queue CRUD routes tests', function () {
         done();
     });
 
-    it('should be Queue get use token', (done)=>{
+    it('should be Queue get use token', (done) => {
         request(app)
-        .get('/api/queues')
-        .set('Authorization', 'Bearer ' + token)
-        .expect(200)
-        .end((err, res)=>{
-            if (err) {
-                return done(err);
-            }
-            var resp = res.body;
-            done();
-        });
+            .get('/api/queues')
+            .set('Authorization', 'Bearer ' + token)
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+                var resp = res.body;
+                done();
+            });
     });
 
     it('should be Queue get by id', function (done) {
@@ -68,14 +68,14 @@ describe('Queue CRUD routes tests', function () {
                         }
                         var resp = res.body;
                         assert.equal(resp.status, 200);
-                        assert.equal(resp.data.name, mockup.name);
+                        assert.equal(resp.data.queue, mockup.queue);
                         done();
                     });
             });
 
     });
 
-    it('should be Queue post use token', (done)=>{
+    it('should be Queue post use token', (done) => {
         request(app)
             .post('/api/queues')
             .set('Authorization', 'Bearer ' + token)
@@ -86,11 +86,73 @@ describe('Queue CRUD routes tests', function () {
                     return done(err);
                 }
                 var resp = res.body;
-                assert.equal(resp.data.name, mockup.name);
+                assert.equal(resp.data.queue, mockup.queue);
                 done();
             });
     });
+    it('should be Queue postDetail', (done) => {
+        var shop_id = {
+            _id: '1234561212',
+            user_id: '321456'
+        }
+        var queue1 = new Queue({
+            queue: '1',
+            shop_id: '21231251',
+            status: false,
+            createby: {
+                _id: '12312312311'
+            }
+        })
+        var queue2 = new Queue({
+            queue: '2',
+            shop_id: '1234561212',
+            status: true,
+            createby: {
+                _id: '321456'
+            }
+        })
+        var queue3 = new Queue({
+            queue: '3',
+            shop_id: '1234561212',
+            status: true,
+            createby: {
+                _id: '21235646512'
+            }
+        })
+        queue3.save((err, q3) => {
+            if (err) {
+                return done(err);
+            }
+            queue2.save((err, q2) => {
+                if (err) {
+                    return done(err);
+                }
+                queue1.save((err, q1) => {
+                    if (err) {
+                        return done(err);
+                    }
+                    // console.log(q1,q2,q3);
+                    request(app)
+                        .post('/api/queue-detail')
+                        .set('Authorization', 'Bearer ' + token)
+                        .send(shop_id)
+                        .expect(200)
+                        .end(function (err, res) {
+                            if (err) {
+                                return done(err);
+                            }
+                            var resp = res.body;
+                            console.log(resp);
+                            assert.equal(resp.data.queue, 2);
+                            done();
+                        });
+                })
+            })
+        })
 
+
+
+    });
     it('should be queue put use token', function (done) {
 
         request(app)
@@ -104,7 +166,7 @@ describe('Queue CRUD routes tests', function () {
                 }
                 var resp = res.body;
                 var update = {
-                    name: 'name update'
+                    queue: 'name update'
                 }
                 request(app)
                     .put('/api/queues/' + resp.data._id)
@@ -116,7 +178,7 @@ describe('Queue CRUD routes tests', function () {
                             return done(err);
                         }
                         var resp = res.body;
-                        assert.equal(resp.data.name, update.name);
+                        assert.equal(resp.data.queue, update.queue);
                         done();
                     });
             });
@@ -144,15 +206,15 @@ describe('Queue CRUD routes tests', function () {
 
     });
 
-    it('should be queue get not use token', (done)=>{
+    it('should be queue get not use token', (done) => {
         request(app)
-        .get('/api/queues')
-        .expect(403)
-        .expect({
-            status: 403,
-            message: 'User is not authorized'
-        })
-        .end(done);
+            .get('/api/queues')
+            .expect(403)
+            .expect({
+                status: 403,
+                message: 'User is not authorized'
+            })
+            .end(done);
     });
 
     it('should be queue post not use token', function (done) {
@@ -182,7 +244,7 @@ describe('Queue CRUD routes tests', function () {
                 }
                 var resp = res.body;
                 var update = {
-                    name: 'name update'
+                    queue: 'name update'
                 }
                 request(app)
                     .put('/api/queues/' + resp.data._id)

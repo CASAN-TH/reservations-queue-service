@@ -12,6 +12,12 @@ module.exports = function (app) {
         .get(controller.read)
         .put(controller.update)
         .delete(controller.delete);
-
+    app.route('/api/queue-detail')
+        .post(
+            controller.getQueue,
+            controller.sortQueue,
+            controller.cookigQueue,
+            controller.returnData
+        )
     app.param('queueId', controller.getByID);
 }
