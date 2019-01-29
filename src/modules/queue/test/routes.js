@@ -93,7 +93,7 @@ describe('Queue CRUD routes tests', function () {
     it('should be Queue postDetail', (done) => {
         var shop_id = {
             _id: '1234561212',
-            user_id: '321456'
+            user_id: '321456d'
         }
         var queue1 = new Queue({
             queue: '1',
@@ -143,7 +143,7 @@ describe('Queue CRUD routes tests', function () {
                             }
                             var resp = res.body;
                             console.log(resp);
-                            assert.equal(resp.data.queue, 2);
+                            assert.equal(resp.data.queue, 0);
                             done();
                         });
                 })
