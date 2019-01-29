@@ -68,7 +68,7 @@ describe('Queue CRUD routes tests', function () {
                         }
                         var resp = res.body;
                         assert.equal(resp.status, 200);
-                        assert.equal(resp.data.queue, mockup.queue);
+                        assert.equal(resp.data.peoples, mockup.peoples);
                         done();
                     });
             });
@@ -86,17 +86,17 @@ describe('Queue CRUD routes tests', function () {
                     return done(err);
                 }
                 var resp = res.body;
-                assert.equal(resp.data.queue, mockup.queue);
+                assert.equal(resp.data.peoples, mockup.peoples);
                 done();
             });
     });
     it('should be Queue postDetail', (done) => {
         var shop_id = {
             _id: '1234561212',
-            user_id: '321456d'
+            user_id: '321456'
         }
         var queue1 = new Queue({
-            queue: '1',
+            peoples: '11',
             shop_id: '21231251',
             status: false,
             createby: {
@@ -104,7 +104,7 @@ describe('Queue CRUD routes tests', function () {
             }
         })
         var queue2 = new Queue({
-            queue: '2',
+            peoples: '18',
             shop_id: '1234561212',
             status: true,
             createby: {
@@ -112,7 +112,7 @@ describe('Queue CRUD routes tests', function () {
             }
         })
         var queue3 = new Queue({
-            queue: '3',
+            peoples: '10',
             shop_id: '1234561212',
             status: true,
             createby: {
@@ -143,7 +143,7 @@ describe('Queue CRUD routes tests', function () {
                             }
                             var resp = res.body;
                             console.log(resp);
-                            assert.equal(resp.data.queue, 0);
+                            assert.equal(resp.data.queue, 2);
                             done();
                         });
                 })
@@ -166,7 +166,7 @@ describe('Queue CRUD routes tests', function () {
                 }
                 var resp = res.body;
                 var update = {
-                    queue: 'name update'
+                    peoples: 'name update'
                 }
                 request(app)
                     .put('/api/queues/' + resp.data._id)
@@ -178,7 +178,7 @@ describe('Queue CRUD routes tests', function () {
                             return done(err);
                         }
                         var resp = res.body;
-                        assert.equal(resp.data.queue, update.queue);
+                        assert.equal(resp.data.peoples, update.peoples);
                         done();
                     });
             });
@@ -244,7 +244,7 @@ describe('Queue CRUD routes tests', function () {
                 }
                 var resp = res.body;
                 var update = {
-                    queue: 'name update'
+                    peoples: 'name update'
                 }
                 request(app)
                     .put('/api/queues/' + resp.data._id)
