@@ -112,7 +112,7 @@ exports.getQueue = (req, res, next) => {
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
-            // console.log(data);
+            console.log("getQueue : ",data);
             req.find = data
             next();
 
@@ -121,26 +121,28 @@ exports.getQueue = (req, res, next) => {
     })
 }
 exports.sortQueue = (req, res, next) => {
-    // var dataSort = req.find
     var dataSort = req.find.sort((a, b) => {
         return new Date(b.created) - new Date(a.created);
     })
     req.sortDataQueue = dataSort
-    // console.log(req.sortDataQueue);
+    console.log("sortQueue : ",req.sortDataQueue);
     next();
 }
 exports.cookigQueue = (req, res, next) => {
     var userId = req.body.user_id
-    const index = _.findIndex(req.sortDataQueue, function (o) {
-        return o.createby._id.toString() == userId.toString();
-    });
-    // console.log(index);
-    req.dataQueue = {
-        queue: req.sortDataQueue.length === 0 ? 0 : index + 1
+    if (userId) {
+        var index = _.findIndex(req.sortDataQueue, function (o) {
+            return o.createby._id.toString() == userId.toString();
+        });
+        console.log("cookigQueue : ",index+1)
+        req.dataQueue = {
+            queue: req.sortDataQueue.length !== 0 ? index + 1 : 0
+        }
+        next();
+    }else{
+        next();
     }
-
-
-    next();
+    
 }
 exports.returnData = (req, res) => {
     res.jsonp({
