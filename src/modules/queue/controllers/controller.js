@@ -129,9 +129,10 @@ exports.sortQueue = (req, res, next) => {
     next();
 }
 exports.cookigQueue = (req, res, next) => {
-    var userId = req.body.user_id
+    // var userId = req.body.user_id
+    var userId = req.user._id
     var index = 0;
-    if (userId) {
+   
 
         index = _.findIndex(req.sortDataQueue, function (o) {
             return o.createby._id.toString() == userId;
@@ -141,9 +142,7 @@ exports.cookigQueue = (req, res, next) => {
             queue: index !== 0 ? index + 1 : 0
         }
         next();
-    } else {
-        next();
-    }
+    
 
 }
 exports.returnData = (req, res) => {
