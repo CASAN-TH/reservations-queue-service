@@ -143,7 +143,7 @@ describe('Queue CRUD routes tests', function () {
                             }
                             var resp = res.body;
                             console.log(resp);
-                            // assert.equal(resp.data.queue, 2);
+                            assert.equal(resp.data.queue, 2);
                             done();
                         });
                 })
