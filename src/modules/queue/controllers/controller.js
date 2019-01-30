@@ -129,7 +129,8 @@ exports.sortQueue = (req, res, next) => {
     next();
 }
 exports.cookigQueue = (req, res, next) => {
-    var userId = req.body.user_id
+    // var userId = req.body.user_id
+    var userId = req.user._id
     var index = 0;
     if (userId) {
 
