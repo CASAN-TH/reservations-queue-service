@@ -103,9 +103,9 @@ exports.delete = function (req, res) {
     });
 };
 exports.getQueue = (req, res, next) => {
-    var id = req.body._id
+    var shop_id = req.body._id
     // console.log(req.body._id);
-    Queue.find({ shop_id: id, status: true }, (err, data) => {
+    Queue.find({ shop_id: shop_id, status: true }, (err, data) => {
         if (err) {
             return res.status(400).send({
                 status: 400,
@@ -115,9 +115,7 @@ exports.getQueue = (req, res, next) => {
             console.log("getQueue : ", data);
             req.find = data
             next();
-
         }
-
     })
 }
 exports.sortQueue = (req, res, next) => {
@@ -133,12 +131,12 @@ exports.cookigQueue = (req, res, next) => {
     // var userId = req.user._id
     console.log(userId)
 
-    var index = _.findIndex(req.sortDataQueue, function (o) {
+    var index = req.sortDataQueue.findIndex( function (o) {
         return o.createby._id.toString() == userId;
     });
     console.log("cookigQueue : ", index + 1)
     req.dataQueue = {
-        queue: index ? index : 5
+        queue: index + 1
     }
     next();
 }
