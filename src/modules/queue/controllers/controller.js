@@ -129,21 +129,18 @@ exports.sortQueue = (req, res, next) => {
     next();
 }
 exports.cookigQueue = (req, res, next) => {
-    // var userId = req.body.user_id
-    var userId = req.user._id
-    var index = 0;
-   
+    var userId = req.body.user_id
+    // var userId = req.user._id
+    console.log(userId)
 
-        index = _.findIndex(req.sortDataQueue, function (o) {
-            return o.createby._id.toString() == userId;
-        });
-        console.log("cookigQueue : ", index + 1)
-        req.dataQueue = {
-            queue: index !== 0 ? index + 1 : 0
-        }
-        next();
-    
-
+    var index = _.findIndex(req.sortDataQueue, function (o) {
+        return o.createby._id.toString() == userId;
+    });
+    console.log("cookigQueue : ", index + 1)
+    req.dataQueue = {
+        queue: index ? index : 5
+    }
+    next();
 }
 exports.returnData = (req, res) => {
     res.jsonp({
