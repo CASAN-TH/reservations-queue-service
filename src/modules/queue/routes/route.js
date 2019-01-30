@@ -16,7 +16,7 @@ module.exports = function (app) {
         .post(
             controller.getQueue,
             // controller.sortQueue,
-            controller.cookigQueue,
+            // controller.cookigQueue,
             controller.returnData
         )
     app.param('queueId', controller.getByID);

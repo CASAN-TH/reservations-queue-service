@@ -108,7 +108,7 @@ describe('Queue CRUD routes tests', function () {
             shop_id: '1234561212',
             status: true,
             createby: {
-                _id: '321456sas'
+                _id: '321456sd'
             }
         })
         var queue3 = new Queue({
@@ -116,7 +116,7 @@ describe('Queue CRUD routes tests', function () {
             shop_id: '1234561212',
             status: true,
             createby: {
-                _id: '21235646512'
+                _id: '321456'
             }
         })
         queue3.save((err, q3) => {
@@ -143,7 +143,7 @@ describe('Queue CRUD routes tests', function () {
                             }
                             var resp = res.body;
                             console.log(resp);
-                            assert.equal(resp.data.queue, 3);
+                            assert.equal(resp.data.queuewait, 3);
                             done();
                         });
                 })
