@@ -15,7 +15,7 @@ module.exports = function (app) {
     app.route('/api/queue-detail')
         .post(
             controller.getQueue,
-            controller.sortQueue,
+            // controller.sortQueue,
             controller.cookigQueue,
             controller.returnData
         )

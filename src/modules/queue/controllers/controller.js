@@ -116,7 +116,7 @@ exports.getQueue = (req, res, next) => {
             req.find = data
             next();
         }
-    })
+    }).sort('-created')
 }
 exports.sortQueue = (req, res, next) => {
     var dataSort = req.find.sort((a, b) => {
@@ -129,12 +129,12 @@ exports.sortQueue = (req, res, next) => {
 exports.cookigQueue = (req, res, next) => {
     var userId = req.body.user_id
     // var userId = req.user._id
-    console.log(userId)
+    console.log("sort : ",req.find)
 
-    var index = req.sortDataQueue.findIndex( function (o) {
-        return o.createby._id.toString() == userId;
+    var index = req.find.findIndex( function (o) {
+        return o.createby._id.toString() == userId.toString();
     });
-    console.log("cookigQueue : ", index + 1)
+    console.log("cookigQueue : ", index)
     req.dataQueue = {
         queue: index + 1
     }
