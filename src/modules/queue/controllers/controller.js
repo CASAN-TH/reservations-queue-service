@@ -112,7 +112,7 @@ exports.getQueue = (req, res, next) => {
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
-            console.log("getQueue : ",data);
+            console.log("getQueue : ", data);
             req.find = data
             next();
 
@@ -125,24 +125,26 @@ exports.sortQueue = (req, res, next) => {
         return new Date(b.created) - new Date(a.created);
     })
     req.sortDataQueue = dataSort
-    console.log("sortQueue : ",req.sortDataQueue);
+    console.log("sortQueue : ", req.sortDataQueue);
     next();
 }
 exports.cookigQueue = (req, res, next) => {
     var userId = req.body.user_id
+    var index = 0;
     if (userId) {
-        var index = _.findIndex(req.sortDataQueue, function (o) {
-            return o.createby._id.toString() == userId.toString();
+
+        index = _.findIndex(req.sortDataQueue, function (o) {
+            return o.createby._id.toString() == userId;
         });
-        console.log("cookigQueue : ",index+1)
+        console.log("cookigQueue : ", index + 1)
         req.dataQueue = {
-            queue: req.sortDataQueue.length !== 0 ? index + 1 : 0
+            queue: index !== 0 ? index + 1 : 0
         }
         next();
-    }else{
+    } else {
         next();
     }
-    
+
 }
 exports.returnData = (req, res) => {
     res.jsonp({
