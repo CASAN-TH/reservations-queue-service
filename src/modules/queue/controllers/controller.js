@@ -169,7 +169,7 @@ exports.findByShopId = (req, res, next, id) => {
             // console.log(req.data)
             next();
         };
-    }).lean().sort('-created');
+    }).lean().sort('created');
 }
 exports.returnShopData = (req, res) => {
     res.jsonp({
