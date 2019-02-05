@@ -147,4 +147,33 @@ exports.returnData = (req, res) => {
         status: 200,
         data: req.data
     })
+
+}
+exports.findByShopId = (req, res, next, id) => {
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send({
+            status: 400,
+            message: 'Id is invalid'
+        });
+    }
+
+    Queue.find({ shop_id: id, status: true }, function (err, data) {
+        if (err) {
+            return res.status(400).send({
+                status: 400,
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            req.data = data ? data : {};
+            // console.log(req.data)
+            next();
+        };
+    }).lean().sort('-created');
+}
+exports.returnShopData = (req, res) => {
+    res.jsonp({
+        status: 200,
+        data: req.data
+    })
 }

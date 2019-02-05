@@ -90,6 +90,9 @@ describe('Queue CRUD routes tests', function () {
                 done();
             });
     });
+
+
+
     it('should be Queue postDetail', (done) => {
         var shop_id = {
             _id: '1234561212',
@@ -280,6 +283,58 @@ describe('Queue CRUD routes tests', function () {
                     })
                     .end(done);
             });
+
+    });
+    xit('should be QueueList get by id', function (done) {
+        var dataShop = {
+            _id: '123456'
+        }
+        var queuelist1 = new Queue({
+            peoples: '11',
+            shop_id: dataShop._id,
+            status: true,
+            createby: {
+                _id: '321456'
+            }
+        })
+        var queuelist2 = new Queue({
+            peoples: '8',
+            shop_id: dataShop._id,
+            status: false,
+            createby: {
+                _id: '211111'
+            }
+        })
+        queuelist2.save((err, ql2) => {
+            if (err) {
+                return done(err);
+            }
+            queuelist1.save((err, ql1) => {
+                if (err) {
+                    return done(err)
+                }
+                // console.log(ql1)
+                request(app)
+                    .get('/api/queues-list/' + dataShop._id)
+                    .set('Authorization', 'Bearer ' + token)
+                    .expect(200)
+                    .end(function (err, res) {
+                        if (err) {
+                            return done(err);
+                        }
+                        var resp = res.body;
+                        console.log(resp)
+                        assert.equal(resp.status, 200);
+                        assert.equal(resp.data.length, 1);
+                        assert.equal(resp.data[0].peoples, queuelist1.peoples);
+                        assert.equal(resp.data[0].shop_id, queuelist1.shop_id);
+                        assert.equal(resp.data[0].status, queuelist1.status);
+                        done();
+                    });
+
+            });
+        })
+
 
     });
 

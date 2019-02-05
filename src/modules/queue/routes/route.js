@@ -19,5 +19,11 @@ module.exports = function (app) {
             // controller.cookigQueue,
             controller.returnData
         )
+    app.route('/api/queues-list/:id')
+        .get(
+            controller.returnShopData
+        )
     app.param('queueId', controller.getByID);
+    app.param('id', controller.findByShopId);
+
 }
