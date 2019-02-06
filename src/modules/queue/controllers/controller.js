@@ -157,7 +157,7 @@ exports.getTicketHistoryUser = function (req, res, next, id) {
             message: 'Id is invalid'
         });
     }
-    
+
     Queue.find({ user_id: id, status: false }, (err, data) => {
         if (err) {
             return res.status(400).send({
@@ -172,21 +172,19 @@ exports.getTicketHistoryUser = function (req, res, next, id) {
     }).sort('created')
 }
 
-exports.findByQueueId = (req, res, next, id) => {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).send({
-            status: 400,
-            message: 'Id is invalid'
-        });
-    }
+exports.findByQueueId = (req, res, next) => {
 
-    Queue.findByIdAndUpdate(id, { status: false }, { new: true }, function (err, data) {
+    console.log(req.body)
+
+    Queue.findByIdAndUpdate(req.body._id, { status: false, remark: req.body.remark }, { new: true }, function (err, data) {
         if (err) {
             return res.status(400).send({
                 status: 400,
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
+            console.log(data)
+
             req.data = data ? data : {};
             next();
         };
