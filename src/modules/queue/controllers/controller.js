@@ -120,34 +120,11 @@ exports.getQueue = (req, res, next) => {
         }
     }).sort('-created')
 }
-exports.sortQueue = (req, res, next) => {
-    var dataSort = req.find.sort((a, b) => {
-        return new Date(b.created) - new Date(a.created);
-    })
-    req.sortDataQueue = dataSort
-    console.log("sortQueue : ", req.sortDataQueue);
-    next();
-}
-exports.cookigQueue = (req, res, next) => {
-    var userId = req.body.user_id
-    // var userId = req.user._id
-    console.log("sort : ", req.find)
-
-    var index = req.find.findIndex(function (o) {
-        return o.createby._id.toString() === userId.toString();
-    });
-    console.log("cookigQueue : ", index)
-    req.dataQueue = {
-        queue: index + 1
-    }
-    next();
-}
 exports.returnData = (req, res) => {
     res.jsonp({
         status: 200,
         data: req.data
     })
-
 }
 exports.findByShopId = (req, res, next, id) => {
 
@@ -170,10 +147,4 @@ exports.findByShopId = (req, res, next, id) => {
             next();
         };
     }).lean().sort('created');
-}
-exports.returnShopData = (req, res) => {
-    res.jsonp({
-        status: 200,
-        data: req.data
-    })
 }
