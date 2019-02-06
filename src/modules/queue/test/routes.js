@@ -85,7 +85,7 @@ describe('Queue CRUD routes tests', function () {
         })
         queueUser.save(function (err, data) {
             request(app)
-                .get('/api/getqueues-user/' + data._id)
+                .get('/api/queues-user/' + data._id)
                 .set('Authorization', 'Bearer ' + token)
                 .expect(200)
                 .end(function (err, res) {
