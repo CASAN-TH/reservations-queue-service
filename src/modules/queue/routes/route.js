@@ -21,12 +21,15 @@ module.exports = function (app) {
         .get(
             controller.returnData
         )
+    app.route('/api/getqueues-user/:userid')
+        .get(controller.returnData)
     app.route('/api/queues-update/:_id')
         .put(
             controller.returnData
         )
     app.param('queueId', controller.getByID);
     app.param('id', controller.findByShopId);
+    app.param('userid',controller.getTicketHistoryUser);
     app.param('_id', controller.findByQueueId);
 
 }

@@ -8,6 +8,9 @@ var QueueSchema = new Schema({
     peoples: {
         type: String
     },
+    user_id:{
+        type:String
+    },
     shop_id: {
         type: String
     },
