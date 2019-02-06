@@ -21,7 +21,12 @@ module.exports = function (app) {
         .get(
             controller.returnData
         )
+    app.route('/api/queues-update/:_id')
+        .put(
+            controller.returnData
+        )
     app.param('queueId', controller.getByID);
     app.param('id', controller.findByShopId);
+    app.param('_id', controller.findByQueueId);
 
 }
