@@ -15,13 +15,11 @@ module.exports = function (app) {
     app.route('/api/queue-detail')
         .post(
             controller.getQueue,
-            // controller.sortQueue,
-            // controller.cookigQueue,
             controller.returnData
         )
     app.route('/api/queues-list/:id')
         .get(
-            controller.returnShopData
+            controller.returnData
         )
     app.param('queueId', controller.getByID);
     app.param('id', controller.findByShopId);
