@@ -166,7 +166,6 @@ exports.getTicketHistoryUser = function (req, res, next, id) {
             });
         } else {
             req.data = data;
-            console.log("getQueue : ", req.data);
             next();
         }
     }).sort('created')

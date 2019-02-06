@@ -21,7 +21,7 @@ module.exports = function (app) {
         .get(
             controller.returnData
         )
-    app.route('/api/getqueues-user/:userid')
+    app.route('/api/queues-user/:userid')
         .get(controller.returnData)
 
     app.route('/api/queues-update/')
