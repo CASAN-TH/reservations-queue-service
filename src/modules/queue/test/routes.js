@@ -75,6 +75,31 @@ describe('Queue CRUD routes tests', function () {
 
     });
 
+    xit('should be User get Ticke status false', function (done) {
+
+        var queueUser = new Queue({
+            peoples: '11',
+            shop_id: '1234561212',
+            status: false,
+            
+        })
+        queueUser.save(function (err, data) {
+            request(app)
+                .get('/api/getqueues-user/' + data._id)
+                .set('Authorization', 'Bearer ' + token)
+                .expect(200)
+                .end(function (err, res) {
+                    if (err) {
+                        return done(err);
+                    }
+                    var resp = res.body;
+                    assert.equal(resp.status, 200);
+                    // assert.equal(resp.data.peoples, mockup.peoples);
+                    done();
+                });
+        })
+    });
+
     it('should be Queue post use token', (done) => {
         request(app)
             .post('/api/queues')
