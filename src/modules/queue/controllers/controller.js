@@ -149,7 +149,7 @@ exports.findByShopId = (req, res, next, id) => {
     }).lean().sort('created');
 }
 
-exports.getTicketHistoryUser = function (req, res, next, id) {
+exports.getTicketHistoryUserFalse = function (req, res, next, id) {
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).send({
@@ -159,6 +159,28 @@ exports.getTicketHistoryUser = function (req, res, next, id) {
     }
 
     Queue.find({ user_id: id, status: false }, (err, data) => {
+        if (err) {
+            return res.status(400).send({
+                status: 400,
+                message: errorHandler.getErrorMessage(err)
+            });
+        } else {
+            req.data = data;
+            next();
+        }
+    }).sort('created')
+}
+
+exports.getTicketHistoryUserTrue = function (req, res, next, id) {
+    
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send({
+            status: 400,
+            message: 'Id is invalid'
+        });
+    }
+
+    Queue.find({ user_id: id, status: true }, (err, data) => {
         if (err) {
             return res.status(400).send({
                 status: 400,
