@@ -24,6 +24,9 @@ module.exports = function (app) {
     app.route('/api/queues-user/:userid')
         .get(controller.returnData)
 
+    app.route('/api/queues-usertrue/:useridtrue')
+        .get(controller.returnData)
+
     app.route('/api/queues-update/')
         .post(
             controller.findByQueueId,
@@ -31,6 +34,7 @@ module.exports = function (app) {
         )
     app.param('queueId', controller.getByID);
     app.param('id', controller.findByShopId);
-    app.param('userid',controller.getTicketHistoryUser);
+    app.param('userid', controller.getTicketHistoryUserFalse);
+    app.param('useridtrue', controller.getTicketHistoryUserTrue);
 
 }
