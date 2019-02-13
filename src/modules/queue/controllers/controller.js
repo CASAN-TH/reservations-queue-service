@@ -3,7 +3,11 @@ var mongoose = require('mongoose'),
     model = require('../models/model'),
     Queue = mongoose.model('Queue'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    request = require("request"),
+    onesignalUrl = process.env.ONESIGNAL_URL || 'https://onesignal.com/api/v1/notifications',
+    onesignalApiKey = process.env.ONESIGNAL_API_KEY || 'MDJjNjI1ODEtNzVkYi00NmMxLThiNTgtNzI0NTM2NzEyZmU5',
+    onesignalAppID = process.env.ONESIGNAL_APPID || '38dc3697-091e-45b0-bdda-38b302b31e63';
 
 exports.getList = function (req, res) {
     Queue.find(function (err, datas) {
@@ -21,7 +25,7 @@ exports.getList = function (req, res) {
     });
 };
 
-exports.create = function (req, res) {
+exports.create = function (req, res,next) {
     var newQueue = new Queue(req.body);
     newQueue.createby = req.user;
     newQueue.save(function (err, data) {
@@ -31,13 +35,49 @@ exports.create = function (req, res) {
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
-            res.jsonp({
-                status: 200,
-                data: data
-            });
+            req.data = data;
+            next()
+            // res.jsonp({
+            //     status: 200,
+            //     data: data
+            // });
         };
     });
 };
+
+exports.createNotification = function (req, res, next) {
+
+    //รอ หาไอดีของร้านค้าเพื่อ ที่จะส่งข้อความให้กับร้านๆๆนั้น
+
+    // request({
+    //     url: onesignalUrl,
+    //     headers: {
+    //         'Authorization': 'Basic ' + onesignalApiKey
+    //     },
+    //     method: 'POST',
+    //     json: {
+    //         app_id: onesignalAppID,
+    //         headings: {
+    //             en: 'การจอง'
+    //         },
+    //         contents: {
+    //             en: 'ยืนยันคำสั่งซื้อ' + req.data.orderno + 'สำเร็จ'
+    //         },
+    //         include_player_ids: userid.ref1,
+    //         data: {
+    //             type: null
+    //         }
+    //     }
+    // }, function (error, response, body) {
+    //     if (error) {
+    //         console.log('Error push notification sending messages: ', error);
+
+    //     } else if (response.body.error) {
+    //         console.log('Error push notification: ', response.body.error);
+    //     }
+    // });
+    next()
+}
 
 exports.getByID = function (req, res, next, id) {
 
