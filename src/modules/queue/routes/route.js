@@ -6,7 +6,11 @@ module.exports = function (app) {
     var urlWithParam = '/api/queues/:queueId';
     app.route(url).all(policy.isAllowed)
         .get(controller.getList)
-        .post(controller.create);
+        .post(
+            controller.create,
+            controller.createNotification,
+            controller.returnData
+            );
 
     app.route(urlWithParam).all(policy.isAllowed)
         .get(controller.read)
