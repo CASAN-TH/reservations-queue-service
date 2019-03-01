@@ -1,10 +1,11 @@
 'use strict';
 var controller = require('../controllers/controller'),
+    mq = require('../../core/controllers/rabbitmq'),
     policy = require('../policy/policy');
 module.exports = function (app) {
     var url = '/api/queues';
     var urlWithParam = '/api/queues/:queueId';
-    app.route(url).all(policy.isAllowed)
+    app.route(url)//.all(policy.isAllowed)
         .get(controller.getList)
         .post(
             controller.create,
@@ -41,4 +42,5 @@ module.exports = function (app) {
     app.param('userid', controller.getTicketHistoryUserFalse);
     app.param('useridtrue', controller.getTicketHistoryUserTrue);
 
+    
 }
