@@ -37,8 +37,8 @@ exports.create = function (req, res, next) {
             });
         } else {
             req.data = data;
-            if (req.data.user_id) {
-                mq.publish('casan', 'getuser', req.data.user_id)
+            if (req.data.shop_id) {
+                mq.publish('casan', 'getuser', req.data.shop_id)
                 next();
             }
             next();
