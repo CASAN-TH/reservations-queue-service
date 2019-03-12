@@ -3,6 +3,7 @@ var mongoose = require('mongoose'),
     model = require('../models/model'),
     Queue = mongoose.model('Queue'),
     errorHandler = require('../../core/controllers/errors.server.controller'),
+    mq = require('../../core/controllers/rabbitmq'),
     _ = require('lodash'),
     request = require("request"),
     onesignalUrl = process.env.ONESIGNAL_URL || 'https://onesignal.com/api/v1/notifications',
@@ -36,7 +37,11 @@ exports.create = function (req, res,next) {
             });
         } else {
             req.data = data;
-            next()
+            if (req.data.user_id) {
+            mq.publish('casan','getuser',req.data.user_id)
+            next();               
+            }
+            next();
             // res.jsonp({
             //     status: 200,
             //     data: data
@@ -47,35 +52,37 @@ exports.create = function (req, res,next) {
 
 exports.createNotification = function (req, res, next) {
 
-    //รอ หาไอดีของร้านค้าเพื่อ ที่จะส่งข้อความให้กับร้านๆๆนั้น
-
-    // request({
-    //     url: onesignalUrl,
-    //     headers: {
-    //         'Authorization': 'Basic ' + onesignalApiKey
-    //     },
-    //     method: 'POST',
-    //     json: {
-    //         app_id: onesignalAppID,
-    //         headings: {
-    //             en: 'การจอง'
-    //         },
-    //         contents: {
-    //             en: 'ยืนยันคำสั่งซื้อ' + req.data.orderno + 'สำเร็จ'
-    //         },
-    //         include_player_ids: userid.ref1,
-    //         data: {
-    //             type: null
-    //         }
-    //     }
-    // }, function (error, response, body) {
-    //     if (error) {
-    //         console.log('Error push notification sending messages: ', error);
-
-    //     } else if (response.body.error) {
-    //         console.log('Error push notification: ', response.body.error);
-    //     }
-    // });
+    mq.consume('casan1','reservations1','datauser_success', (msg)=>{
+        console.log('asaa',msg.content.toString())
+        // รอ หาไอดีของร้านค้าเพื่อ ที่จะส่งข้อความให้กับร้านๆๆนั้น
+        request({
+            url: onesignalUrl,
+            headers: {
+                'Authorization': 'Basic ' + onesignalApiKey
+            },
+            method: 'POST',
+            json: {
+                app_id: onesignalAppID,
+                headings: {
+                    en: 'การจอง'
+                },
+                contents: {
+                    en: 'ยืนยันคำสั่งซื้อ' + req.data.orderno + 'สำเร็จ'
+                },
+                include_player_ids: msg,
+                data: {
+                    type: null
+                }
+            }
+        }, function (error, response, body) {
+            if (error) {
+                console.log('Error push notification sending messages: ', error);
+    
+            } else if (response.body.error) {
+                console.log('Error push notification: ', response.body.error);
+            }
+        });
+      })
     next()
 }
 
