@@ -160,7 +160,7 @@ exports.getQueue = (req, res, next) => {
             });
         } else {
             req.data = {
-                queuewait: data.length ? data.length : 0
+                queuewait: data.length
             }
             // console.log("getQueue : ", req.find);
             next();
