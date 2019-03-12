@@ -26,7 +26,7 @@ exports.getList = function (req, res) {
     });
 };
 
-exports.create = function (req, res,next) {
+exports.create = function (req, res, next) {
     var newQueue = new Queue(req.body);
     newQueue.createby = req.user;
     newQueue.save(function (err, data) {
@@ -38,8 +38,8 @@ exports.create = function (req, res,next) {
         } else {
             req.data = data;
             if (req.data.user_id) {
-            mq.publish('casan','getuser',req.data.user_id)
-            next();               
+                mq.publish('casan', 'getuser', req.data.user_id)
+                next();
             }
             next();
             // res.jsonp({
@@ -52,8 +52,8 @@ exports.create = function (req, res,next) {
 
 exports.createNotification = function (req, res, next) {
 
-    mq.consume('casan1','reservations1','datauser_success', (msg)=>{
-        console.log('asaa',msg.content.toString())
+    mq.consume('casan1', 'reservations1', 'datauser_success', (msg) => {
+        console.log('asaa', msg.content.toString())
         // รอ หาไอดีของร้านค้าเพื่อ ที่จะส่งข้อความให้กับร้านๆๆนั้น
         request({
             url: onesignalUrl,
@@ -77,12 +77,12 @@ exports.createNotification = function (req, res, next) {
         }, function (error, response, body) {
             if (error) {
                 console.log('Error push notification sending messages: ', error);
-    
+
             } else if (response.body.error) {
                 console.log('Error push notification: ', response.body.error);
             }
         });
-      })
+    })
     next()
 }
 
@@ -160,7 +160,7 @@ exports.getQueue = (req, res, next) => {
             });
         } else {
             req.data = {
-                queuewait: data.length
+                queuewait: data.length ? data.length : 0
             }
             // console.log("getQueue : ", req.find);
             next();
@@ -219,7 +219,7 @@ exports.getTicketHistoryUserFalse = function (req, res, next, id) {
 }
 
 exports.getTicketHistoryUserTrue = function (req, res, next, id) {
-    
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).send({
             status: 400,
